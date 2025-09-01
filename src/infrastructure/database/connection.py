@@ -13,8 +13,11 @@ class DatabasePool:
     @classmethod
     async def initialize(cls) -> None:
         if cls._instance is None:
+            database_url = str(settings.database_url.unicode_string()).replace(
+                "postgresql+asyncpg://", "postgresql://"
+            )
             cls._instance = await asyncpg.create_pool(
-                str(settings.database_url.unicode_string()),
+                database_url,
                 min_size=10,
                 max_size=20,
                 command_timeout=60,

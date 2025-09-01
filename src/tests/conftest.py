@@ -2,7 +2,7 @@ import asyncio
 from typing import AsyncGenerator, Generator
 
 import pytest
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 
 from src.infrastructure.database import DatabasePool
 from src.main import app
@@ -24,7 +24,8 @@ async def setup_database():
 
 @pytest.fixture
 async def client(setup_database) -> AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
 
 

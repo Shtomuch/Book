@@ -24,10 +24,10 @@ def upgrade() -> None:
             nationality VARCHAR(100),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        
-        CREATE INDEX idx_authors_name ON authors(name);
+        )
     """)
+    
+    op.execute("CREATE INDEX idx_authors_name ON authors(name)")
     
     op.execute("""
         CREATE TABLE IF NOT EXISTS books (
@@ -41,14 +41,14 @@ def upgrade() -> None:
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             CONSTRAINT chk_published_year CHECK (published_year >= 1800 AND published_year <= EXTRACT(YEAR FROM CURRENT_DATE))
-        );
-        
-        CREATE INDEX idx_books_title ON books(title);
-        CREATE INDEX idx_books_author_id ON books(author_id);
-        CREATE INDEX idx_books_genre ON books(genre);
-        CREATE INDEX idx_books_published_year ON books(published_year);
-        CREATE INDEX idx_books_isbn ON books(isbn);
+        )
     """)
+    
+    op.execute("CREATE INDEX idx_books_title ON books(title)")
+    op.execute("CREATE INDEX idx_books_author_id ON books(author_id)")
+    op.execute("CREATE INDEX idx_books_genre ON books(genre)")
+    op.execute("CREATE INDEX idx_books_published_year ON books(published_year)")
+    op.execute("CREATE INDEX idx_books_isbn ON books(isbn)")
     
     op.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -60,11 +60,11 @@ def upgrade() -> None:
             is_superuser BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        
-        CREATE INDEX idx_users_email ON users(email);
-        CREATE INDEX idx_users_username ON users(username);
+        )
     """)
+    
+    op.execute("CREATE INDEX idx_users_email ON users(email)")
+    op.execute("CREATE INDEX idx_users_username ON users(username)")
     
     op.execute("""
         CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -73,18 +73,22 @@ def upgrade() -> None:
             NEW.updated_at = CURRENT_TIMESTAMP;
             RETURN NEW;
         END;
-        $$ language 'plpgsql';
+        $$ language 'plpgsql'
     """)
     
     op.execute("""
         CREATE TRIGGER update_authors_updated_at BEFORE UPDATE ON authors
-            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-            
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()
+    """)
+    
+    op.execute("""
         CREATE TRIGGER update_books_updated_at BEFORE UPDATE ON books
-            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-            
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()
+    """)
+    
+    op.execute("""
         CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
-            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()
     """)
 
 
