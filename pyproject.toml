@@ -1,0 +1,59 @@
+[tool.poetry]
+name = "book-management-system"
+version = "0.1.0"
+description = "FastAPI Book Management System"
+authors = ["Denys Shtoma <denys.shtoms@knu.ua>"]
+readme = "README.md"
+python = "^3.11"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.5"
+uvicorn = {extras = ["standard"], version = "^0.32.1"}
+pydantic = "^2.10.3"
+pydantic-settings = "^2.6.1"
+asyncpg = "^0.30.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.18"
+alembic = "^1.14.0"
+aiofiles = "^24.1.0"
+orjson = "^3.10.12"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-asyncio = "^0.24.0"
+pytest-cov = "^6.0.0"
+httpx = "^0.28.1"
+black = "^24.10.0"
+ruff = "^0.8.3"
+mypy = "^1.14.0"
+pre-commit = "^4.0.1"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = ["alembic", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "B", "Q", "C90", "UP", "S", "T", "ANN", "ASYNC", "A", "C4", "DTZ", "EM", "ISC", "G", "PIE", "PT", "RET", "SIM", "TID", "INT", "ARG", "PTH", "PD", "PGH", "PL", "TRY", "NPY", "RUF"]
+ignore = ["ANN101", "ANN102", "ANN401", "B008", "S101", "PLR0913"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["src/tests"]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
